@@ -35,7 +35,8 @@ public struct AuthorityDestroyedEvent has copy, drop {
 
 public struct AuthorityUpdatedEvent has copy, drop {
     authority_id: ID,
-    version: String,
+    from_version: String,
+    to_version: String,
 }
 
 //=== Errors ===
