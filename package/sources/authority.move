@@ -79,7 +79,7 @@ public fun new(
     authority_cap
 }
 
-public fun destroy(cap: AuthorityCap, self: Authority) {
+public fun destroy(self: Authority, cap: AuthorityCap) {
     emit(AuthorityDestroyedEvent {
         authority_id: self.id(),
     });
