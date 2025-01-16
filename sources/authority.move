@@ -12,7 +12,7 @@ public struct Authority has key {
     version: String,
 }
 
-public struct AuthorityCap has key {
+public struct AuthorityCap has key, store {
     id: UID,
     authority_id: ID,
 }
@@ -29,7 +29,7 @@ public fun new(
     service: String,
     version: String,
     ctx: &mut TxContext,
-) {
+): AuthorityCap {
     let authority = Authority {
         id: object::new(ctx),
         network: network,
@@ -38,7 +38,14 @@ public fun new(
         version: version,
     };
 
+    let authority_cap = AuthorityCap {
+        id: object::new(ctx),
+        authority_id: authority.id(),
+    };
+
     transfer::share_object(authority);
+
+    authority_cap
 }
 
 public fun destroy(cap: AuthorityCap, self: Authority) {
