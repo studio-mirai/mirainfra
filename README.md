@@ -25,7 +25,7 @@ For example, a Sui mainnet validator node could use the values below:
 
 The validator node can run a cron job to fetch its assigned `Authority` object and determine whether it needs to update.
 
-# How to Use Miraifra
+# How to Use Mirainfra
 
 The `mirainfra` package is currently deployed on Sui mainnet. Refer to `/package/Move.lock` for the current Package ID.
 
