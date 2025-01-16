@@ -7,6 +7,7 @@ use std::string::String;
 public struct Authority has key {
     id: UID,
     network: String,
+    environment: String,
     service: String,
     version: String,
 }
@@ -22,10 +23,17 @@ const EInvalidAuthorityCap: u64 = 0;
 
 //=== Public Functions ===
 
-public fun new(network: String, service: String, version: String, ctx: &mut TxContext) {
+public fun new(
+    network: String,
+    environment: String,
+    service: String,
+    version: String,
+    ctx: &mut TxContext,
+) {
     let authority = Authority {
         id: object::new(ctx),
         network: network,
+        environment: environment,
         service: service,
         version: version,
     };
@@ -54,6 +62,10 @@ public fun id(self: &Authority): ID {
 
 public fun network(self: &Authority): String {
     self.network
+}
+
+public fun environment(self: &Authority): String {
+    self.environment
 }
 
 public fun service(self: &Authority): String {

@@ -8,6 +8,7 @@ An `Authority` objects looks like this:
 public struct Authority has key {
     id: UID,
     network: String,
+    environment: String,
     service: String,
     version: String,
 }
@@ -17,7 +18,8 @@ When creating an `Authority` object, you must provide a `network`, `service`, an
 
 For example, a Sui mainnet validator node could use the values below:
 
-* `network`: `sui-mainnet`
+* `network`: `sui`
+* `environment`: `mainnet`
 * `service`: `validator`
 * `version`: `fea2f2707d4a8c545879da8df76ee5392fa63364`
 
