@@ -1,6 +1,7 @@
 module mirainfra::authority;
 
 use std::string::String;
+use sui::event::emit;
 
 //=== Structs ===
 
@@ -15,6 +16,26 @@ public struct Authority has key {
 public struct AuthorityCap has key, store {
     id: UID,
     authority_id: ID,
+}
+
+//=== Events ===
+
+public struct AuthorityCreatedEvent has copy, drop {
+    authority_id: ID,
+    authority_cap_id: ID,
+    network: String,
+    environment: String,
+    service: String,
+    version: String,
+}
+
+public struct AuthorityDestroyedEvent has copy, drop {
+    authority_id: ID,
+}
+
+public struct AuthorityUpdatedEvent has copy, drop {
+    authority_id: ID,
+    version: String,
 }
 
 //=== Errors ===
@@ -43,12 +64,25 @@ public fun new(
         authority_id: authority.id(),
     };
 
+    emit(AuthorityCreatedEvent {
+        authority_id: authority.id(),
+        authority_cap_id: authority_cap.id.to_inner(),
+        network: authority.network,
+        environment: authority.environment,
+        service: authority.service,
+        version: authority.version,
+    });
+
     transfer::share_object(authority);
 
     authority_cap
 }
 
 public fun destroy(cap: AuthorityCap, self: Authority) {
+    emit(AuthorityDestroyedEvent {
+        authority_id: self.id(),
+    });
+
     let Authority { id, .. } = self;
     id.delete();
 
@@ -58,7 +92,16 @@ public fun destroy(cap: AuthorityCap, self: Authority) {
 
 public fun update_version(self: &mut Authority, cap: &AuthorityCap, version: String) {
     assert!(cap.authority_id == self.id(), EInvalidAuthorityCap);
+
+    let from_version = self.version;
+
     self.version = version;
+
+    emit(AuthorityUpdatedEvent {
+        authority_id: self.id(),
+        from_version: from_version,
+        to_version: self.version,
+    });
 }
 
 //== View Functions ===
