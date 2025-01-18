@@ -7,7 +7,7 @@ json-rpc-address: "<JSON_RPC_ADDRESS>"
 enable-event-processing: true
 
 genesis:
-  genesis-file-location: "/opt/sui/mainnet/config/genesis.blob"
+  genesis-file-location: "/opt/sui/testnet/config/genesis.blob"
 
 p2p-config:
   seed-peers:
