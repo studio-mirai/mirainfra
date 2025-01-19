@@ -2,6 +2,7 @@
 
 NETWORK=$1
 TYPE=$2
+CONCURRENCY=$3
 
 if [ "$NETWORK" != "mainnet" ] && [ "$NETWORK" != "testnet" ]; then
     echo "Error: NETWORK must be either 'mainnet' or 'testnet'"
@@ -13,21 +14,24 @@ if [ "$TYPE" != "formal" ] && [ "$TYPE" != "rocksdb" ]; then
     exit 1
 fi
 
-    
+if [ -z "$CONCURRENCY" ]; then
+    CONCURRENCY=50
+fi
+
 if [ "$TYPE" == "formal" ]; then
     /opt/sui/bin/sui-tool download-formal-snapshot \
         --latest \
         --genesis /opt/sui/config/genesis.blob \
         --network $NETWORK \
         --path /opt/sui/db \
-        --num-parallel-downloads 50 \
+        --num-parallel-downloads $CONCURRENCY \
         --no-sign-request
     mv /opt/sui/db/epoch* /opt/sui/db/live
 elif [ "$TYPE" == "rocksdb" ]; then
     /opt/sui/bin/sui-tool download-db-snapshot --latest \
         --network $NETWORK \
         --path /opt/sui/db \
-        --num-parallel-downloads 50 \
+        --num-parallel-downloads $CONCURRENCY \
         --skip-indexes \
         --no-sign-request
     mv /opt/sui/db/epoch* /opt/sui/db/live
