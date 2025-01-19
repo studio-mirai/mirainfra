@@ -1,4 +1,4 @@
-db-path: "/opt/sui/mainnet/db"
+db-path: "/opt/sui/db"
 
 network-address: "<NETWORK_ADDRESS>"
 metrics-address: "<METRICS_ADDRESS>"
